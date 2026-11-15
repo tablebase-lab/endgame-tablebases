@@ -21,15 +21,17 @@ public class ThreePieceAlgorithm {
         MappedByteBuffer mappedByteBuffer = initializeMBB(pieceInt);
 
         firstIteration(pieceInt, mappedByteBuffer); // is PROVEN to work for ALL rook and queen checkmates in the eighth (didn't check pawn yet)
-        mainIteration(pieceInt, mappedByteBuffer); // WORKS for mate in even plies, odd plies so far is correct but incomplete
+        mainIteration(pieceInt, mappedByteBuffer); // WORKS for rook checkmates
     }
 
+    // for 4 plies the iteration has to be both for white and black wins, right now it's for white only
     public static void mainIteration(int pieceInt, MappedByteBuffer mappedByteBuffer) {
 
-        for (int mateInXPlies = 2; mateInXPlies <= 127; mateInXPlies++) {
+        for (int mateInXPlies = 2; mateInXPlies <= 64; mateInXPlies++) {
             System.out.println("Now doing mate in " + mateInXPlies + " plies");
             int index = 0;
             for (int turn = 1; turn <= 2; turn++) {
+
                 for (int kingTwo = 0; kingTwo <= 63; kingTwo++) {
                     for (int piece = 0; piece <= 63; piece++) {
                         for (int kingOne = 0; kingOne <= 63; kingOne++) { // king HAS to be here cuz of cached indexes
@@ -38,6 +40,7 @@ public class ThreePieceAlgorithm {
 
                             if (!proceed) continue;
                             int[] pieces = {turn, 8, kingOne, kingTwo, 1, pieceInt * 100 + piece};
+
                             if (PositionCheck.checkPosition(pieces)) {
                                 if (mappedByteBuffer.get(index) != 0) {
                                     index++;
@@ -46,7 +49,9 @@ public class ThreePieceAlgorithm {
 
                                 if (searchForSolvedPlies(mateInXPlies, pieces, pieceInt, mappedByteBuffer)) {
 
-                                    System.out.println("MATE IN 3 PLIES: " + Arrays.toString(pieces));
+                                    if (mateInXPlies >= 6) {
+                                        System.out.println("Mate in " + mateInXPlies + ": " + Arrays.toString(pieces));
+                                    }
 
                                     mappedByteBuffer.put(index, (byte) ((mateInXPlies + 1) / 2));
                                 }
@@ -67,10 +72,6 @@ public class ThreePieceAlgorithm {
 
         boolean isEven = mateInXPlies % 2 == 0;
 
-        if (Arrays.equals(pieces, new int[]{1, 8, 18, 16, 1, 210})) {
-            System.out.println();
-        }
-
         // the method calls for isOdd are about 100x more than for is even, around 6 million per ply
         if (isEven) {
             for (int[] movePos : pieceMoves) {
@@ -87,27 +88,19 @@ public class ThreePieceAlgorithm {
             return true;
 
         } else {
+            if (pieces[Constants.TURN_INDEX] != Constants.WHITE_TURN) return false;
             for (int[] movePos : pieceMoves) {
                 if (movePos[0] == 0) break;
+
+                if (Arrays.equals(pieces, new int[]{2, 8, 18, 1, 1, 208}) && mateInXPlies == 3) {
+                    System.out.println();
+                }
 
                 movePos = Helpers.flipPos(movePos, pieceInt == 5);
 
                 int result = retrieveValueByPosition(movePos, pieceInt, mappedByteBuffer);
                 if (result == -1) continue;
-                if (result == (mateInXPlies + 1) / 2 - 1) { // at this point both a position with one ply mate and two ply mates satisfy the three ply mate rule
-                    int[][] plyCheckMoves = MoveGenerator.generateMoves(movePos);
-                    int minCheckmate = 1000; // arbitrary large number
-
-                    for (int[] plyCheckMove : plyCheckMoves) {
-                        if (plyCheckMove[0] == 0) break;
-
-                        int helperResult = retrieveValueByPosition(plyCheckMove, pieceInt, mappedByteBuffer);
-                        if (helperResult == -1) continue;
-                        minCheckmate = Math.min(helperResult, minCheckmate);
-                    }
-
-                    if (minCheckmate < result) break;
-
+                if (result == (mateInXPlies + 1) / 2 - 1) {
                     return true;
                 }
             }

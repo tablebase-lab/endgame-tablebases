@@ -24,7 +24,13 @@ public class Main {
 
     static void main() throws InterruptedException {
         FileZeroPopulator.fullThreePiece();
+
+//        ThreePieceAlgorithm.KXKLoop(1);
         ThreePieceAlgorithm.KXKLoop(2);
+//        ThreePieceAlgorithm.KXKLoop(5);
+
+        System.out.println("done");
+
 ////
 //        String filePath = Path.of("data", "three_piece", Helpers.getFileNameThreePiece(2),
 //                Helpers.getFileNameThreePiece(2) + ".bin").toString();
