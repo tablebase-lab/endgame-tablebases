@@ -15,13 +15,11 @@ import java.util.Arrays;
 
 public class ThreePieceAlgorithm {
 
-    public static int methodCalls = 0;
-
     public static void KXKLoop(int pieceInt) {
         MappedByteBuffer mappedByteBuffer = initializeMBB(pieceInt);
 
-        firstIteration(pieceInt, mappedByteBuffer); // is PROVEN to work for ALL rook and queen checkmates in the eighth (didn't check pawn yet)
-        mainIteration(pieceInt, mappedByteBuffer); // WORKS for rook checkmates
+        firstIteration(pieceInt, mappedByteBuffer); // works for ALL rook, queen, pawn checkmates in the eighth / half
+        mainIteration(pieceInt, mappedByteBuffer); // WORKS for rook, queen =checkmates
     }
 
     // for 4 plies the iteration has to be both for white and black wins, right now it's for white only
@@ -31,7 +29,6 @@ public class ThreePieceAlgorithm {
             System.out.println("Now doing mate in " + mateInXPlies + " plies");
             int index = 0;
             for (int turn = 1; turn <= 2; turn++) {
-
                 for (int kingTwo = 0; kingTwo <= 63; kingTwo++) {
                     for (int piece = 0; piece <= 63; piece++) {
                         for (int kingOne = 0; kingOne <= 63; kingOne++) { // king HAS to be here cuz of cached indexes
@@ -49,7 +46,7 @@ public class ThreePieceAlgorithm {
 
                                 if (searchForSolvedPlies(mateInXPlies, pieces, pieceInt, mappedByteBuffer)) {
 
-                                    if (mateInXPlies >= 6) {
+                                    if (pieceInt == 5) {
                                         System.out.println("Mate in " + mateInXPlies + ": " + Arrays.toString(pieces));
                                     }
 
@@ -183,8 +180,7 @@ public class ThreePieceAlgorithm {
             int[][] movesOfMoves = MoveGenerator.generateMoves(move); // we get 2 ply deep here
 
             if (isACheckmateOrStalemate(movesOfMoves) && Check.isInCheck(move) >= 1) { // runs isInCheck twice incl. in checkPosition
-                byte value = (byte) (pieces[0] == 1 ? 1 : -1);
-                mappedByteBuffer.put(index, value);
+                mappedByteBuffer.put(index, (byte) 1);
                 return;
             }
         }
@@ -193,6 +189,24 @@ public class ThreePieceAlgorithm {
     public static boolean isACheckmateOrStalemate(int[][] moves) {
         return moves[0][0] == 0;
     }
+
+    public static MappedByteBuffer initializeMBB(int pieceInt) {
+        String name = Helpers.getFileNameThreePiece(pieceInt);
+        assert name != null;
+        Path path = Path.of("data", "three_piece", name, name + ".bin");
+
+        MappedByteBuffer mappedByteBuffer = null;
+
+        try (FileChannel channel = FileChannel.open(path, StandardOpenOption.READ, StandardOpenOption.WRITE)) {
+            mappedByteBuffer = channel.map(FileChannel.MapMode.READ_WRITE, 0, 5 * 1024 * 1024); // 5MBs at a time
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return mappedByteBuffer;
+    }
+
+    // todo: both methods are outdated
 
     public static int retrieveIndexByPositionOld(int pieceInt, int[] position) {
         int count = 0;
@@ -236,21 +250,5 @@ public class ThreePieceAlgorithm {
         }
 
         return null;
-    }
-
-    public static MappedByteBuffer initializeMBB(int pieceInt) {
-        String name = Helpers.getFileNameThreePiece(pieceInt);
-        assert name != null;
-        Path path = Path.of("data", "three_piece", name, name + ".bin");
-
-        MappedByteBuffer mappedByteBuffer = null;
-
-        try (FileChannel channel = FileChannel.open(path, StandardOpenOption.READ, StandardOpenOption.WRITE)) {
-            mappedByteBuffer = channel.map(FileChannel.MapMode.READ_WRITE, 0, 5 * 1024 * 1024); // 5MBs at a time
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return mappedByteBuffer;
     }
 }

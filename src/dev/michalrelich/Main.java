@@ -5,8 +5,6 @@ import dev.michalrelich.engine.backend.positioncheck.PositionCheck;
 import dev.michalrelich.engine.frontend.Board;
 import dev.michalrelich.engine.frontend.Piece;
 import dev.michalrelich.tablebase.code.Helpers;
-import dev.michalrelich.tablebase.code.three_piece.FileZeroPopulator;
-import dev.michalrelich.tablebase.code.three_piece.ThreePieceAlgorithm;
 import dev.michalrelich.tablebase.code.three_piece.ThreePieceConstants;
 
 import java.util.Random;
@@ -23,13 +21,17 @@ public class Main {
     // todo: pass a position that has checkmate in one to ThreePieceAlgorithm
 
     static void main() throws InterruptedException {
-        FileZeroPopulator.fullThreePiece();
-
+//        FileZeroPopulator.fullThreePiece();
+//
 //        ThreePieceAlgorithm.KXKLoop(1);
-        ThreePieceAlgorithm.KXKLoop(2);
+//        ThreePieceAlgorithm.KXKLoop(2);
 //        ThreePieceAlgorithm.KXKLoop(5);
+//
+//        System.out.println("done");
 
-        System.out.println("done");
+        for (int i = 0; i <= 63; i++) {
+            System.out.println(i + ": " + Helpers.isLeftHalfKingPosition(i));
+        }
 
 ////
 //        String filePath = Path.of("data", "three_piece", Helpers.getFileNameThreePiece(2),

@@ -15,7 +15,7 @@ public class Helpers {
 
     public static boolean isLeftHalfKingPosition(int pos) {
         int length = Constants.BOARD_LENGTH;
-        return pos % length < length / 2 + 1;
+        return pos % length < length / 2;
     }
 
     // only one i didnt check yet
