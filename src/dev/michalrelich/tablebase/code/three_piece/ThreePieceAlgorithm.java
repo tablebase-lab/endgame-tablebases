@@ -39,17 +39,13 @@ public class ThreePieceAlgorithm {
                             int[] pieces = {turn, 8, kingOne, kingTwo, 1, pieceInt * 100 + piece};
 
                             if (PositionCheck.checkPosition(pieces)) {
-                                if (mappedByteBuffer.get(index) != 0) {
+                                if (mappedByteBuffer.get(index) != 0 || turn % 2 != mateInXPlies % 2) {
                                     index++;
                                     continue;
                                 }
 
                                 if (searchForSolvedPlies(mateInXPlies, pieces, pieceInt, mappedByteBuffer)) {
-
-                                    if (pieceInt == 5) {
-                                        System.out.println("Mate in " + mateInXPlies + ": " + Arrays.toString(pieces));
-                                    }
-
+//                                    System.out.println("Mate in " + mateInXPlies + ": " + Arrays.toString(pieces));
                                     mappedByteBuffer.put(index, (byte) ((mateInXPlies + 1) / 2));
                                 }
 
