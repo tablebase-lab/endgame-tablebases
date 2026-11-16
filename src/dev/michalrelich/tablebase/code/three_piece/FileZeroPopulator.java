@@ -8,7 +8,7 @@ import java.io.IOException;
 
 public class FileZeroPopulator {
 
-    private static void threePiece(int pieceInt) {
+    public static void threePiece(int pieceInt) {
 
         String fileName = Helpers.getFileNameThreePiece(pieceInt);
 

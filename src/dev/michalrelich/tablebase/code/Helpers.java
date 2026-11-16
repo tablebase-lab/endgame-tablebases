@@ -30,6 +30,7 @@ public class Helpers {
                 flipHorizontal(posNew);
                 return posNew;
             }
+            return pos;
         }
 
         int eight = getEighth(whiteKingPos);

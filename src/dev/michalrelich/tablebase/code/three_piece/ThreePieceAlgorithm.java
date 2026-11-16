@@ -45,7 +45,7 @@ public class ThreePieceAlgorithm {
                                 }
 
                                 if (searchForSolvedPlies(mateInXPlies, pieces, pieceInt, mappedByteBuffer)) {
-//                                    System.out.println("Mate in " + mateInXPlies + ": " + Arrays.toString(pieces));
+                                    System.out.println("Mate in " + mateInXPlies + ": " + Arrays.toString(pieces));
                                     mappedByteBuffer.put(index, (byte) ((mateInXPlies + 1) / 2));
                                 }
 
@@ -69,6 +69,10 @@ public class ThreePieceAlgorithm {
         if (isEven) {
             for (int[] movePos : pieceMoves) {
                 if (movePos[0] == 0) break;
+
+                if (Arrays.equals(pieces, new int[]{2,8,50,56,1,508})) {
+                    System.out.println();
+                }
 
                 movePos = Helpers.flipPos(movePos, pieceInt == 5);
 

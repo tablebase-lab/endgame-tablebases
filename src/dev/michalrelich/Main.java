@@ -19,18 +19,15 @@ public class Main {
 
     private static final Random random = new Random();
 
-    // todo: limit conversions from int[] to long OR (ideally) use bit-packing
-    // todo: pass a position that has checkmate in one to ThreePieceAlgorithm
-
     static void main() throws InterruptedException {
-        long start = System.nanoTime();
 
-        FileZeroPopulator.fullThreePiece();
-        ThreePieceAlgorithm.KXKLoop(1);
+//        FileZeroPopulator.fullThreePiece();
+//        ThreePieceAlgorithm.KXKLoop(1);
+//        ThreePieceAlgorithm.KXKLoop(2);
 
-        double seconds = (System.nanoTime() - start) / 1_000_000_000.0;
+        FileZeroPopulator.threePiece(5);
+        ThreePieceAlgorithm.KXKLoop(5);
 
-        System.out.printf("KQK generation: %.3f seconds%n", seconds);
 
 //        ThreePieceAlgorithm.KXKLoop(2);
 //        ThreePieceAlgorithm.KXKLoop(5); // correct tablebases for 1,2 alr generated
