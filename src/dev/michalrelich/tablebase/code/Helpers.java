@@ -18,7 +18,6 @@ public class Helpers {
         return pos % length < length / 2;
     }
 
-    // only one i didnt check yet
     public static int[] flipPos(int[] pos, boolean isEndgameWithPawn) {
         int whiteKingPos = pos[Constants.WHITE_KING_INDEX];
         if (isEighthKingPosition(whiteKingPos)) return pos;

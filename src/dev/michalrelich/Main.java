@@ -24,10 +24,8 @@ public class Main {
 //        FileZeroPopulator.fullThreePiece();
 //        ThreePieceAlgorithm.KXKLoop(1);
 //        ThreePieceAlgorithm.KXKLoop(2);
-
         FileZeroPopulator.threePiece(5);
         ThreePieceAlgorithm.KXKLoop(5);
-
 
 //        ThreePieceAlgorithm.KXKLoop(2);
 //        ThreePieceAlgorithm.KXKLoop(5); // correct tablebases for 1,2 alr generated

@@ -70,10 +70,6 @@ public class ThreePieceAlgorithm {
             for (int[] movePos : pieceMoves) {
                 if (movePos[0] == 0) break;
 
-                if (Arrays.equals(pieces, new int[]{2,8,50,56,1,508})) {
-                    System.out.println();
-                }
-
                 movePos = Helpers.flipPos(movePos, pieceInt == 5);
 
                 int result = retrieveValueByPosition(movePos, pieceInt, mappedByteBuffer); // fault here
@@ -89,13 +85,23 @@ public class ThreePieceAlgorithm {
             for (int[] movePos : pieceMoves) {
                 if (movePos[0] == 0) break;
 
-                if (Arrays.equals(pieces, new int[]{2, 8, 18, 1, 1, 208}) && mateInXPlies == 3) {
+                movePos = Helpers.flipPos(movePos, pieceInt == 5);
+
+                if (Arrays.equals(movePos, new int[]{2, 8, 10, 0, 1, 157}) && mateInXPlies == 3) {
                     System.out.println();
                 }
 
-                movePos = Helpers.flipPos(movePos, pieceInt == 5);
+                int result;
+                boolean pawnPromotion = pieceInt == 5 && movePos[Constants.DELIMITER_INDEX + 1] / 100 != 5;
+                if (pawnPromotion) {
+                    int newPieceInt = pawnPromotion ? movePos[Constants.DELIMITER_INDEX + 1] / 100 : pieceInt;
+                    if (newPieceInt == 3 || newPieceInt == 4) continue; // draw
+                    MappedByteBuffer newMBB = initializeMBB(newPieceInt);
+                    result = retrieveValueByPosition(movePos, newPieceInt, newMBB);
+                } else {
+                    result = retrieveValueByPosition(movePos, pieceInt, mappedByteBuffer);
+                }
 
-                int result = retrieveValueByPosition(movePos, pieceInt, mappedByteBuffer);
                 if (result == -1) continue;
                 if (result == (mateInXPlies + 1) / 2 - 1) {
                     return true;
