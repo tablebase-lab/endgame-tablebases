@@ -85,17 +85,15 @@ public class ThreePieceAlgorithm {
             for (int[] movePos : pieceMoves) {
                 if (movePos[0] == 0) break;
 
-                movePos = Helpers.flipPos(movePos, pieceInt == 5);
-
-                if (Arrays.equals(movePos, new int[]{2, 8, 10, 0, 1, 157}) && mateInXPlies == 3) {
-                    System.out.println();
-                }
-
                 int result;
                 boolean pawnPromotion = pieceInt == 5 && movePos[Constants.DELIMITER_INDEX + 1] / 100 != 5;
+                int newPieceInt = pawnPromotion ? movePos[Constants.DELIMITER_INDEX + 1] / 100 : pieceInt;
+
+                movePos = Helpers.flipPos(movePos, newPieceInt == 5);
                 if (pawnPromotion) {
-                    int newPieceInt = pawnPromotion ? movePos[Constants.DELIMITER_INDEX + 1] / 100 : pieceInt;
                     if (newPieceInt == 3 || newPieceInt == 4) continue; // draw
+
+                    movePos = Helpers.flipPos(movePos, false);
                     MappedByteBuffer newMBB = initializeMBB(newPieceInt);
                     result = retrieveValueByPosition(movePos, newPieceInt, newMBB);
                 } else {
