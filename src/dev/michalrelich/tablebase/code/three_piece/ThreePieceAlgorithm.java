@@ -130,7 +130,7 @@ public class ThreePieceAlgorithm {
             int[] arr = {turn, 8, kingOne, blackKingPos, 1, pieceInt * 100 + piecePos};
             if (PositionCheck.checkPosition(arr)) {
                 if (Arrays.equals(position, arr)) {
-                    return retrieveValueByIndex(index, pieceInt, mappedByteBuffer);
+                    return retrieveResultByIndex(index, pieceInt, mappedByteBuffer);
                 }
                 index++;
             }
@@ -139,13 +139,8 @@ public class ThreePieceAlgorithm {
         return 0;
     }
 
-    public static int retrieveValueByIndex(int index, int pieceInt, MappedByteBuffer mappedByteBuffer) {
+    public static int retrieveResultByIndex(int index, int pieceInt, MappedByteBuffer mappedByteBuffer) {
         assert Helpers.getFileNameThreePiece(pieceInt) != null;
-
-//        methodCalls++;
-//        if (methodCalls % 10000 == 0) {
-//            System.out.println("Called " + methodCalls);
-//        }
 
         return mappedByteBuffer.get(index);
     }
@@ -210,31 +205,38 @@ public class ThreePieceAlgorithm {
         return mappedByteBuffer;
     }
 
-    // todo: both methods are outdated
+    public static int retrieveIndexByPosition(int pieceInt, int[] position) {
+        int turn = position[Constants.TURN_INDEX];
+        int blackKingPos = position[Constants.BLACK_KING_INDEX];
+        int piecePos = position[Constants.DELIMITER_INDEX + 1];
 
-    public static int retrieveIndexByPositionOld(int pieceInt, int[] position) {
-        int count = 0;
-        for (int turn = 1; turn <= 2; turn++) {
-            for (int kingOne = 0; kingOne <= 63; kingOne++) {
-                boolean proceed = pieceInt == 5 ? Helpers.isLeftHalfKingPosition(kingOne) :
-                        Helpers.isEighthKingPosition(kingOne);
+        int index = ThreePieceConstants.returnIndexFromArray(pieceInt, turn, blackKingPos, piecePos);
+        for (int kingOne = 0; kingOne <= 63; kingOne++) {
+            boolean proceed = pieceInt == 5 ? Helpers.isLeftHalfKingPosition(kingOne) :
+                    Helpers.isEighthKingPosition(kingOne);
 
-                if (!proceed) continue;
+            if (!proceed) continue;
 
-                for (int kingTwo = 0; kingTwo <= 63; kingTwo++) {
-                    for (int piece = 0; piece <= 63; piece++) {
-                        int[] arr = {turn, 8, kingOne, kingTwo, 1, pieceInt * 100 + piece};
-                        if (Arrays.equals(arr, position)) return count;
-                        if (PositionCheck.checkPosition(arr)) count++;
-                    }
+            int[] arr = {turn, 8, kingOne, blackKingPos, 1, pieceInt * 100 + piecePos};
+            if (PositionCheck.checkPosition(arr)) {
+                if (Arrays.equals(position, arr)) {
+                    return index;
                 }
+                index++;
             }
         }
 
         return -1;
     }
 
-    public static int[] retrievePositionByIndexOld(int pieceInt, int index) {
+    public static int retrieveResultByPosition (int pieceInt, int[] position){
+        return ThreePieceAlgorithm.retrieveResultByIndex(ThreePieceAlgorithm.retrieveIndexByPosition(pieceInt, position),
+                pieceInt, ThreePieceAlgorithm.initializeMBB(pieceInt));
+    }
+
+    // todo: method is outdated
+
+    public static int[] retrievePositionByIndexOld (int pieceInt, int index) {
         int count = 0;
         for (int turn = 1; turn <= 2; turn++) {
             for (int kingOne = 0; kingOne <= 63; kingOne++) {

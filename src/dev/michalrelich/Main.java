@@ -19,69 +19,16 @@ public class Main {
 
     private static final Random random = new Random();
 
-    static void main() throws InterruptedException {
+    static void main() {
 
-//        FileZeroPopulator.fullThreePiece();
-//        ThreePieceAlgorithm.KXKLoop(1);
-//        ThreePieceAlgorithm.KXKLoop(2);
+        FileZeroPopulator.fullThreePiece();
+        ThreePieceAlgorithm.KXKLoop(1);
+        ThreePieceAlgorithm.KXKLoop(2);
         FileZeroPopulator.threePiece(5);
-        ThreePieceAlgorithm.KXKLoop(5);
 
-//        ThreePieceAlgorithm.KXKLoop(2);
-//        ThreePieceAlgorithm.KXKLoop(5); // correct tablebases for 1,2 alr generated
-
-
-//        String filePath = Path.of("data", "three_piece", Helpers.getFileNameThreePiece(2),
-//                Helpers.getFileNameThreePiece(2) + ".bin").toString();
-////
-////        int index = ThreePieceAlgorithm.retrieveIndexByPositionOld(2, new int[]{1, 8, 0, 8, 1, 217});
-////        System.out.println(index);
-//
-////        try (RandomAccessFile file = new RandomAccessFile(filePath, "r")) {
-////            file.seek(index);
-////            System.out.println(file.readByte());
-////
-////        } catch (Exception e) {
-////            throw new RuntimeException(e);
-////        }
-//
-
-//        int oneCounter = 0;
-//        int twoCounter = 0;
-//        int threeCounter = 0;
-//        int total = ThreePieceConstants.KXKPositions(2);
-//
-//        for (int i = 0; i < total; i++) {
-//            try (RandomAccessFile file = new RandomAccessFile(filePath, "r")) {
-//
-//                file.seek(i);
-//
-//                byte signedIndex = file.readByte();
-//
-//                if (signedIndex == 1) oneCounter++;
-//                if (signedIndex == 2) twoCounter++;
-//                if (signedIndex == 3) threeCounter++;
-//
-////                if (i == 19417) {
-////                    System.out.println("Found checkmate in 2? " + signedIndex);
-////                }
-//
-//
-//
-//
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//
-//        int rest = total - oneCounter - twoCounter - threeCounter;
-//
-//        System.out.printf("Out of " + total + " positions %n" +
-//                oneCounter + " were checkmates in one move" +
-//                twoCounter + " had a mate in 2 moves %n" +
-//                threeCounter + " had a mate in 3 moves %n" +
-//                rest + " had another result."
-//        );
+        int[] pos = {1, 8, 7, 35, 1, 218};
+        int pieceInt = pos[Constants.DELIMITER_INDEX + 1] / 100;
+        System.out.println(ThreePieceAlgorithm.retrieveResultByPosition(pieceInt, pos));
     }
 
     // will probably take some time as it is, like a few days
