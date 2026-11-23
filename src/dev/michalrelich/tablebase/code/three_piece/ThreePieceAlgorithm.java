@@ -15,11 +15,13 @@ import java.util.Arrays;
 
 public class ThreePieceAlgorithm {
 
+    public static int count = 0;
+
     public static void KXKLoop(int pieceInt) {
         MappedByteBuffer mappedByteBuffer = initializeMBB(pieceInt);
 
         firstIteration(pieceInt, mappedByteBuffer); // works for ALL rook, queen, pawn checkmates in the eighth / half
-        mainIteration(pieceInt, mappedByteBuffer); // WORKS for rook, queen =checkmates
+        mainIteration(pieceInt, mappedByteBuffer); // WORKS for rook, queen, pawn checkmates
     }
 
     // for 4 plies the iteration has to be both for white and black wins, right now it's for white only
@@ -45,7 +47,6 @@ public class ThreePieceAlgorithm {
                                 }
 
                                 if (searchForSolvedPlies(mateInXPlies, pieces, pieceInt, mappedByteBuffer)) {
-                                    System.out.println("Mate in " + mateInXPlies + ": " + Arrays.toString(pieces));
                                     mappedByteBuffer.put(index, (byte) ((mateInXPlies + 1) / 2));
                                 }
 
@@ -205,10 +206,12 @@ public class ThreePieceAlgorithm {
         return mappedByteBuffer;
     }
 
+    // todo: buggy methods
+
     public static int retrieveIndexByPosition(int pieceInt, int[] position) {
         int turn = position[Constants.TURN_INDEX];
         int blackKingPos = position[Constants.BLACK_KING_INDEX];
-        int piecePos = position[Constants.DELIMITER_INDEX + 1];
+        int piecePos = position[Constants.DELIMITER_INDEX + 1] % 100;
 
         int index = ThreePieceConstants.returnIndexFromArray(pieceInt, turn, blackKingPos, piecePos);
         for (int kingOne = 0; kingOne <= 63; kingOne++) {
@@ -229,14 +232,14 @@ public class ThreePieceAlgorithm {
         return -1;
     }
 
-    public static int retrieveResultByPosition (int pieceInt, int[] position){
+    public static int retrieveResultByPosition(int pieceInt, int[] position) {
         return ThreePieceAlgorithm.retrieveResultByIndex(ThreePieceAlgorithm.retrieveIndexByPosition(pieceInt, position),
                 pieceInt, ThreePieceAlgorithm.initializeMBB(pieceInt));
     }
 
     // todo: method is outdated
 
-    public static int[] retrievePositionByIndexOld (int pieceInt, int index) {
+    public static int[] retrievePositionByIndexOld(int pieceInt, int index) {
         int count = 0;
         for (int turn = 1; turn <= 2; turn++) {
             for (int kingOne = 0; kingOne <= 63; kingOne++) {
@@ -257,4 +260,6 @@ public class ThreePieceAlgorithm {
 
         return null;
     }
+
+
 }
