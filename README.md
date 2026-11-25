@@ -1,6 +1,6 @@
 # Endgame Tablebases
 
-NOTE: The current entry is slightly outdated. The new changes are that the endgame is **finished for every three-piece endgame** that is not automatically drawn (KQK, KRK, KPK) and **cross-verified using external tablebases**, with work being done to implement this verification into the repository. I aim to update the entry as soon as the verification, and therefore my work on the chess three-piece egtb, is finished.
+NOTE: *The current entry is slightly outdated. The new changes are that the endgame is **finished for every three-piece endgame** that is not automatically drawn (KQK, KRK, KPK) and **cross-verified using external tablebases**, with work being done to implement this verification into the repository. I aim to update the entry as soon as the verification, and therefore my work on the chess three-piece egtb, is finished.*
 
 An independent Java project exploring **endgame tablebases**, **retrograde analysis**, and **efficient storage of chess positions**, with the longer-term goal of comparing endgames across games in the chess family.
 
