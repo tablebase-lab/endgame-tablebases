@@ -4,8 +4,8 @@ import dev.michalrelich.engine.backend.Constants;
 import dev.michalrelich.engine.backend.positioncheck.PositionCheck;
 import dev.michalrelich.engine.frontend.Board;
 import dev.michalrelich.engine.frontend.Piece;
-import dev.michalrelich.tablebase.code.EGTBConstants;
 import dev.michalrelich.tablebase.code.Helpers;
+import dev.michalrelich.tablebase.code.three_piece.ThreePieceAlgorithm;
 import dev.michalrelich.tablebase.code.three_piece.ThreePieceConstants;
 
 import java.util.Random;
@@ -19,16 +19,14 @@ public class Main {
     private static final Random random = new Random();
 
     static void main() {
-
-        System.out.println("Total three piece endgames: " + EGTBConstants.three_piece_endgame_count());
 //        FileZeroPopulator.fullThreePiece();
 //        ThreePieceAlgorithm.KXKLoop(1);
 //        ThreePieceAlgorithm.KXKLoop(2);
-//        FileZeroPopulator.threePiece(5);
-//
-//        int[] pos = {1, 8, 7, 35, 1, 218};
-//        int pieceInt = pos[Constants.DELIMITER_INDEX + 1] / 100;
-//        System.out.println(ThreePieceAlgorithm.retrieveResultByPosition(pieceInt, pos));
+//        ThreePieceAlgorithm.KXKLoop(5);
+
+        int[] pos = {1, 8, 3, 35, 1, 218};
+        int pieceInt = pos[Constants.DELIMITER_INDEX + 1] / 100;
+        System.out.println(ThreePieceAlgorithm.retrieveResultByPosition(pieceInt, pos));
     }
 
     // will probably take some time as it is, like a few days

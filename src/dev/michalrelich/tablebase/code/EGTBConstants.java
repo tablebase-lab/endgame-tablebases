@@ -16,10 +16,6 @@ public class EGTBConstants {
                 for (int kingTwo = 0; kingTwo <= 63; kingTwo++) {
                     for (int piece = 0; piece <= 63; piece++) {
                         for (int kingOne = 0; kingOne <= 63; kingOne++) { // king HAS to be here cuz of cached indexes
-                            boolean proceed = pieceInt == 5 ? Helpers.isLeftHalfKingPosition(kingOne) :
-                                    Helpers.isEighthKingPosition(kingOne);
-
-                            if (!proceed) continue;
                             int[] pieces = {turn, 8, kingOne, kingTwo, 1, pieceInt * 100 + piece};
 
                             if (PositionCheck.checkPosition(pieces)) {
