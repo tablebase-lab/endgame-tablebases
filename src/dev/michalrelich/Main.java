@@ -19,14 +19,7 @@ public class Main {
     private static final Random random = new Random();
 
     static void main() {
-//        FileZeroPopulator.fullThreePiece();
-//        ThreePieceAlgorithm.KXKLoop(1);
-//        ThreePieceAlgorithm.KXKLoop(2);
-//        ThreePieceAlgorithm.KXKLoop(5);
-
-        int[] pos = {1, 8, 3, 35, 1, 218};
-        int pieceInt = pos[Constants.DELIMITER_INDEX + 1] / 100;
-        System.out.println(ThreePieceAlgorithm.retrieveResultByPosition(pieceInt, pos));
+        ThreePieceAlgorithm.fullThreePieceGenerator();
     }
 
     // will probably take some time as it is, like a few days

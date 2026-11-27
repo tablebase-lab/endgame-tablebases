@@ -13,7 +13,7 @@ public class FileZeroPopulator {
         String fileName = Helpers.getFileNameThreePiece(pieceInt);
 
         int totalBytes = ThreePieceConstants.KXKPositions(pieceInt);
-        int bufferSize = 8*1024*1024;
+        int bufferSize = 5*1024; // 5 KiB
         int iterations = totalBytes / bufferSize;
 
         int remainder = totalBytes % bufferSize;

@@ -15,16 +15,32 @@ import java.util.Arrays;
 
 public class ThreePieceAlgorithm {
 
-    public static int count = 0;
+    private static MappedByteBuffer KQK_MBB;
+    private static MappedByteBuffer KRK_MBB;
+    private static MappedByteBuffer KPK_MBB;
 
-    public static void KXKLoop(int pieceInt) {
-        MappedByteBuffer mappedByteBuffer = initializeMBB(pieceInt);
+    public static void fullThreePieceGenerator() {
+        FileZeroPopulator.fullThreePiece();
 
-        firstIteration(pieceInt, mappedByteBuffer); // works for ALL rook, queen, pawn checkmates in the eighth / half
-        mainIteration(pieceInt, mappedByteBuffer); // WORKS for rook, queen, pawn checkmates
+        KQK_MBB = initializeMBB(1);
+        KRK_MBB = initializeMBB(2);
+        KPK_MBB = initializeMBB(5);
+
+        int[] endgames = {1, 2, 5};
+
+        for (int endgamePiece : endgames) {
+            ThreePieceAlgorithm.KXKLoop(endgamePiece);
+        }
     }
 
-    // for 4 plies the iteration has to be both for white and black wins, right now it's for white only
+    public static void KXKLoop(int pieceInt) {
+        MappedByteBuffer mappedByteBuffer = assignMBB(pieceInt);
+
+        firstIteration(pieceInt, mappedByteBuffer);
+        mainIteration(pieceInt, mappedByteBuffer);
+    }
+
+    // for 4 piece endgames the iteration has to be both for white and black wins, right now it's for white only
     public static void mainIteration(int pieceInt, MappedByteBuffer mappedByteBuffer) {
 
         for (int mateInXPlies = 2; mateInXPlies <= 64; mateInXPlies++) {
@@ -47,6 +63,9 @@ public class ThreePieceAlgorithm {
                                 }
 
                                 if (searchForSolvedPlies(mateInXPlies, pieces, pieceInt, mappedByteBuffer)) {
+                                    if (mateInXPlies >= 56) {
+                                        System.out.println(Arrays.toString(pieces));
+                                    }
                                     mappedByteBuffer.put(index, (byte) ((mateInXPlies + 1) / 2));
                                 }
 
@@ -95,7 +114,7 @@ public class ThreePieceAlgorithm {
                     if (newPieceInt == 3 || newPieceInt == 4) continue; // draw
 
                     movePos = Helpers.flipPos(movePos, false);
-                    MappedByteBuffer newMBB = initializeMBB(newPieceInt);
+                    MappedByteBuffer newMBB = assignMBB(newPieceInt);
                     result = retrieveValueByPosition(movePos, newPieceInt, newMBB);
                 } else {
                     result = retrieveValueByPosition(movePos, pieceInt, mappedByteBuffer);
@@ -204,6 +223,18 @@ public class ThreePieceAlgorithm {
         }
 
         return mappedByteBuffer;
+    }
+
+    public static MappedByteBuffer assignMBB(int pieceInt) {
+        return switch (pieceInt) {
+            case 1 -> KQK_MBB;
+            case 2 -> KRK_MBB;
+            case 5 -> KPK_MBB;
+            default -> {
+                System.out.println("Something went wrong");
+                yield null;
+            }
+        };
     }
 
     public static int retrieveIndexByPosition(int pieceInt, int[] position) { // meant for lookups by humans, doesn't use precomputed indices
