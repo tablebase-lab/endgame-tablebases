@@ -132,31 +132,12 @@ public class ThreePieceAlgorithm {
     public static int retrieveValueByPosition(int[] position, int pieceInt, MappedByteBuffer mappedByteBuffer) {
 
         if (position[0] == 0) return 0; // stalemate, checkmate
-
         if (position.length <= 5) return 0; //  only two kings
 
-        int turn = position[Constants.TURN_INDEX];
-        int blackKingPos = position[Constants.BLACK_KING_INDEX];
+        int index = ThreePieceTablebaseLookup.retrievePrecomputedIndexByPosition(position, pieceInt);
+        if (index == -1) return 0;
+        return retrieveResultByIndex(index, pieceInt, mappedByteBuffer);
 
-        int piecePos = position[Constants.DELIMITER_INDEX + 1] % 100;
-
-        int index = ThreePieceConstants.returnIndexFromArray(pieceInt, turn, blackKingPos, piecePos);
-        for (int kingOne = 0; kingOne <= 63; kingOne++) {
-            boolean proceed = pieceInt == 5 ? Helpers.isLeftHalfKingPosition(kingOne) :
-                    Helpers.isEighthKingPosition(kingOne);
-
-            if (!proceed) continue;
-
-            int[] arr = {turn, 8, kingOne, blackKingPos, 1, pieceInt * 100 + piecePos};
-            if (PositionCheck.checkPosition(arr)) {
-                if (Arrays.equals(position, arr)) {
-                    return retrieveResultByIndex(index, pieceInt, mappedByteBuffer);
-                }
-                index++;
-            }
-        }
-
-        return 0;
     }
 
     public static int retrieveResultByIndex(int index, int pieceInt, MappedByteBuffer mappedByteBuffer) {
